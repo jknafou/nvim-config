@@ -15,3 +15,7 @@ require("lazy").setup({
     spec = "theprimeagen.lazy",
     change_detection = { notify = false }
 })
+
+vim.schedule(function()
+  vim.opt.rtp:remove("/opt/homebrew/Cellar/neovim/0.10.4_1/lib/nvim")
+end)

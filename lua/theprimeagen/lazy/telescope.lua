@@ -25,6 +25,8 @@ return {
             builtin.grep_string({ search = vim.fn.input("Grep > ") })
         end)
         vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
+        vim.keymap.set("n", "<leader>fu", "<cmd>Telescope lsp_references<cr>", { desc = "Find [U]sages (LSP)" })
+        vim.keymap.set('n', '<leader>vad', '<cmd>Telescope diagnostics<CR>', { noremap = true, silent = true })
     end
 }
 

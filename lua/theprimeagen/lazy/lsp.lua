@@ -1,7 +1,17 @@
 return {
-    -- "github/copilot.vim",
     "neovim/nvim-lspconfig",
     dependencies = {
+        {
+            "folke/lazydev.nvim",
+            ft = "lua", -- only load on lua files
+            opts = {
+                library = {
+                    -- See the configuration section for more details
+                    -- Load luvit types when the `vim.uv` word is found
+                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                },
+            },
+        },
         "stevearc/conform.nvim",
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
@@ -31,11 +41,15 @@ return {
         require("fidget").setup({})
         require("mason").setup()
         require("mason-lspconfig").setup({
+            automatic_installation = true,  -- or false if you prefer manual installs
+
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
+                "ruff",
                 "pyright",
+                "pylsp",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -58,7 +72,6 @@ return {
                     })
                     vim.g.zig_fmt_parse_errors = 0
                     vim.g.zig_fmt_autosave = 0
-
                 end,
                 ["lua_ls"] = function()
                     local lspconfig = require("lspconfig")
@@ -78,6 +91,46 @@ return {
                             }
                         }
                     }
+                end,
+                ["pylsp"] = function()
+                    require("lspconfig").pylsp.setup({
+                        settings = {
+                            pylsp = {
+                                plugins = {
+                                    rope_autoimport = {
+                                        enabled = true,                -- Enable autoimport
+                                        completions = { enabled = true },   -- Enable autoimport completions (optional)
+                                        code_actions = { enabled = true },  -- Enable autoimport code actions (optional)
+                                    },
+                                    rope_completion = { enabled = true }, -- Enable Rope-based completions (optional)
+                                    -- You can also enable isort for better import sorting:
+                                    isort = { enabled = true },
+                                },
+                            },
+                        },
+                    })
+
+                end,
+                ["ruff"] = function()
+                    local lspconfig = require("lspconfig")
+                    lspconfig.ruff.setup({
+                        -- Add any custom settings here if needed
+                    })
+
+                    -- Format on save for buffers attached to Ruff
+                    vim.api.nvim_create_autocmd("LspAttach", {
+                        callback = function(args)
+                            local client = vim.lsp.get_client_by_id(args.data.client_id)
+                            if client and client.name == "ruff" then
+                                vim.api.nvim_create_autocmd("BufWritePre", {
+                                    buffer = args.buf,
+                                    callback = function()
+                                        vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+                                    end,
+                                })
+                            end
+                        end,
+                    })
                 end,
             }
         })
