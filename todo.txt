@@ -1,2 +1,1 @@
 - neovim:
- - save neovim to github

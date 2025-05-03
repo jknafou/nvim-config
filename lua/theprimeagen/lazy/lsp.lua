@@ -50,6 +50,7 @@ return {
                 "ruff",
                 "pyright",
                 "pylsp",
+				"texlab",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -92,11 +93,78 @@ return {
                         }
                     }
                 end,
+                ["pyright"] = function()
+                    local lspconfig = require("lspconfig")
+                    local util = lspconfig.util
+                    lspconfig.pyright.setup({
+                        root_dir = function(fname)
+                            -- First find the Rye project root
+                            local rye_root = util.root_pattern(
+                                ".git",
+                                "pyproject.toml",
+                                "setup.py",
+                                "setup.cfg",
+                                "requirements.txt"
+                            )(fname)
+
+                            -- If Rye root found, check for src directory
+                            if rye_root then
+                                local src_dir = util.path.join(rye_root, "src")
+                                -- Use src directory if it exists, otherwise use Rye root
+                                return util.path.is_dir(src_dir) and src_dir or rye_root
+                            end
+
+                            -- Fallback for non-Rye projects
+                            return util.root_pattern(".git", "setup.py", "requirements.txt")(fname)
+                        end,
+                        settings = {
+                            python = {
+                                analysis = {
+                                    typeCheckingMode = "basic",
+                                    autoImportCompletions = true,
+                                    useLibraryCodeForTypes = true,
+                                    diagnosticMode = "workspace",
+                                    diagnosticSeverityOverrides = {
+                                        reportMissingImports = "none",
+                                        reportMissingTypeStubs = "none",
+                                        reportUnusedImport = "none",
+                                        reportUnusedClass = "none",
+                                        reportUnusedFunction = "none",
+                                        reportUnusedVariable = "none",
+                                    },
+                                },
+                            },
+                        },
+                    })
+                end,
                 ["pylsp"] = function()
-                    require("lspconfig").pylsp.setup({
+                    local lspconfig = require("lspconfig")
+                    local util = lspconfig.util
+                    lspconfig.pylsp.setup({
+                        root_dir = function(fname)
+                            -- First find the Rye project root
+                            local rye_root = util.root_pattern(
+                                ".git",
+                                "pyproject.toml",
+                                "setup.py",
+                                "setup.cfg",
+                                "requirements.txt"
+                            )(fname)
+
+                            -- If Rye root found, check for src directory
+                            if rye_root then
+                                local src_dir = util.path.join(rye_root, "src")
+                                -- Use src directory if it exists, otherwise use Rye root
+                                return util.path.is_dir(src_dir) and src_dir or rye_root
+                            end
+
+                            -- Fallback for non-Rye projects
+                            return util.root_pattern(".git", "setup.py", "requirements.txt")(fname)
+                        end,
                         settings = {
                             pylsp = {
                                 plugins = {
+                                    pycodestyle = { enabled = false }, -- Disable pycodestyle
                                     rope_autoimport = {
                                         enabled = true,                -- Enable autoimport
                                         completions = { enabled = true },   -- Enable autoimport completions (optional)
@@ -109,7 +177,6 @@ return {
                             },
                         },
                     })
-
                 end,
                 ["ruff"] = function()
                     local lspconfig = require("lspconfig")
@@ -131,9 +198,31 @@ return {
                             end
                         end,
                     })
-                end,
-            }
-        })
+				end,
+				["texlab"] = function()
+					local lspconfig = require("lspconfig")
+					lspconfig.texlab.setup({
+						capabilities = capabilities, -- Use the same capabilities as other LSPs
+						settings = {
+							texlab = {
+								build = {
+									executable = "tectonic",
+									args = { "%f", "--synctex" },
+									forwardSearchAfter = true,
+								},
+								forwardSearch = {
+									executable = "zathura",
+									args = { "--synctex-forward", "%l:1:%f", "%p" },
+								},
+								chktex = {
+									onOpenAndSave = true,
+								},
+							},
+						},
+					})
+				end,
+			}
+		})
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -161,10 +250,10 @@ return {
         vim.diagnostic.config({
             -- update_in_insert = true,
             float = {
-                focusable = false,
+                focusable = true,
                 style = "minimal",
                 border = "rounded",
-                source = "always",
+                source = true,
                 header = "",
                 prefix = "",
             },

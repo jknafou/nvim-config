@@ -4,11 +4,10 @@ vim.opt.nu = true
 vim.opt.relativenumber = true
 
 vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-
-vim.opt.smartindent = true
+vim.opt.softtabstop = 4
+vim.opt.expandtab = false  -- Default to tabs globally
+vim.opt.smartindent = true -- Keep globally
 
 vim.opt.wrap = false
 
@@ -22,7 +21,21 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.scrolloff = 8
+-- Function to set scrolloff to half the window height
+local function set_dynamic_scrolloff()
+  local win_height = vim.api.nvim_win_get_height(0)
+  vim.opt.scrolloff = math.floor(win_height / 3)
+end
+
+-- Set initially
+set_dynamic_scrolloff()
+
+-- vim.opt.scrolloff = 30
+-- Update on VimResized event
+vim.api.nvim_create_autocmd("VimResized", {
+  callback = set_dynamic_scrolloff,
+})
+
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
