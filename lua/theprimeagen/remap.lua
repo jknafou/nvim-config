@@ -1,8 +1,11 @@
 vim.g.mapleader = " "
 -- vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+-- vim.keymap.set("n", "<leader>pv", function()
+--   vim.cmd("NvimTreeFocus")
+-- end, { desc = "Focus nvim-tree file explorer" })
 vim.keymap.set("n", "<leader>pv", function()
-  vim.cmd("NvimTreeFocus")
-end, { desc = "Focus nvim-tree file explorer" })
+	vim.cmd(":e .")
+end, { desc = "Focus oil file explorer" })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
