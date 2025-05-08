@@ -1,29 +1,31 @@
 return {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-        {
-            "folke/lazydev.nvim",
-            ft = "lua", -- only load on lua files
-            opts = {
-                library = {
-                    -- See the configuration section for more details
-                    -- Load luvit types when the `vim.uv` word is found
-                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                },
-            },
-        },
-        "stevearc/conform.nvim",
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/nvim-cmp",
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
-        "j-hui/fidget.nvim",
-    },
+	"neovim/nvim-lspconfig",
+	dependencies = {
+		{
+			"folke/lazydev.nvim",
+			ft = "lua", -- only load on lua files
+			opts = {
+				library = {
+					-- See the configuration section for more details
+					-- Load luvit types when the `vim.uv` word is found
+					{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+				},
+			},
+		},
+		"stevearc/conform.nvim",
+		{ "mason-org/mason.nvim", version = "^1.0.0" },
+		{ "mason-org/mason-lspconfig.nvim", version = "^1.0.0" },
+		-- "williamboman/mason.nvim",
+		-- "williamboman/mason-lspconfig.nvim",
+		"hrsh7th/cmp-nvim-lsp",
+		"hrsh7th/cmp-buffer",
+		"hrsh7th/cmp-path",
+		"hrsh7th/cmp-cmdline",
+		"hrsh7th/nvim-cmp",
+		"L3MON4D3/LuaSnip",
+		"saadparwaiz1/cmp_luasnip",
+		"j-hui/fidget.nvim",
+	},
 
     config = function()
         require("conform").setup({
