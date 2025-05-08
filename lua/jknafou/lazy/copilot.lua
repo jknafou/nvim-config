@@ -13,7 +13,13 @@ return {
                     dismiss = "<C-]>",
                 },
             },
-            panel = { enabled = true },
+			panel = { enabled = true },
+			filetypes = {
+				markdown = true,
+				python = true,
+				latex = true,
+				text = true,
+			},
         })
     end,
 }
