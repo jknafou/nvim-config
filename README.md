@@ -5,6 +5,6 @@ Welcome to my supercharged Neovim configuration! This setup is built for speed, 
 To install the configuration, clone the repository and copy the contents to your Neovim configuration directory. The default location for the Neovim configuration directory is `~/.config/nvim`.
 
 ```bash
-git clone git@github.com:jknafou/nvim-config.git
+git clone https://github.com/jknafou/nvim-config.git
 cp -r nvim-config/* ~/.config/nvim/
 ```
