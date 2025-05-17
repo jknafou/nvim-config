@@ -6,5 +6,6 @@ To install the configuration, clone the repository and copy the contents to your
 
 ```bash
 git clone https://github.com/jknafou/nvim-config.git
+mkdir ~/.config/nvim
 cp -r nvim-config/* ~/.config/nvim/
 ```
