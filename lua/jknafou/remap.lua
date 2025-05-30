@@ -64,3 +64,18 @@ end)
 vim.keymap.set('i', '<A-BS>', '<C-w>', { noremap = true })         -- Alt+Backspace: delete word before cursor
 vim.keymap.set('i', '<D-BS>', '<C-u>', { noremap = true })         -- Cmd+Backspace: delete to start of line
 
+vim.keymap.set('n', '<c-k>', ':wincmd k<CR>')
+vim.keymap.set('n', '<c-j>', ':wincmd j<CR>')
+vim.keymap.set('n', '<c-h>', ':wincmd h<CR>')
+vim.keymap.set('n', '<c-l>', ':wincmd l<CR>')
+
+vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>h]], {desc = "Move to left pane from terminal"})
+vim.keymap.set('t', '<C-j>', [[<C-\><C-N><C-w>j]], {desc = "Move to below pane from terminal"})
+vim.keymap.set('t', '<C-k>', [[<C-\><C-N><C-w>k]], {desc = "Move to above pane from terminal"})
+vim.keymap.set('t', '<C-l>', [[<C-\><C-N><C-w>l]], {desc = "Move to right pane from terminal"})
+
+-- Horizontal split
+vim.keymap.set('n', '<leader>sh', ':split<CR>', { desc = 'Horizontal split' })
+
+-- Vertical split
+vim.keymap.set('n', '<leader>sv', ':vsplit<CR>', { desc = 'Vertical split' })
