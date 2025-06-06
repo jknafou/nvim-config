@@ -46,23 +46,6 @@ autocmd({ "BufWritePre" }, {
     command = [[%s/\s\+$//e]],
 })
 
--- vim.api.nvim_create_autocmd("BufWritePre", {
---   pattern = "*.py",
---   callback = function()
---     vim.lsp.buf.format({ async = false })
---   end,
--- })
-
-autocmd('BufEnter', {
-    group = jKnafouGroup,
-    callback = function()
-        if vim.bo.filetype == "zig" then
-            vim.cmd.colorscheme("tokyonight-night")
-        else
-            vim.cmd.colorscheme("rose-pine-moon")
-        end
-    end
-})
 
 autocmd('LspAttach', {
     group = jKnafouGroup,
